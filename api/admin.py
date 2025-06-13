@@ -8,12 +8,30 @@ admin.site.index_title = 'Welcome to Borrow Box Admins Page'
 
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
-    search_fields = ('title', 'genre')
+    search_fields = ('title', 'genre__category', 'author__name')
 
 admin.site.register(Book, BookAdmin)
-admin.site.register(Author)
-admin.site.register(Genre)
-admin.site.register(Review)
-admin.site.register(Reserve)
+
+class AuthorAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+
+admin.site.register(Author, AuthorAdmin)
+
+class GenreAdmin(admin.ModelAdmin):
+    search_fields = ('category',)
+
+admin.site.register(Genre, GenreAdmin)
+
+class ReviewAdmin(admin.ModelAdmin):
+    search_fields = ('user__username','book', 'rating')
+
+admin.site.register(Review, ReviewAdmin)
+
+class ReserveAdmin(admin.ModelAdmin):
+    search_fields = ('user__username','book__title',)
+
+admin.site.register(Reserve, ReserveAdmin)
 # admin.site.register(Fine)
-admin.site.register(Borrow)
+class BorrowAdmin(admin.ModelAdmin):
+    search_fields = ('user__username', 'return_date')
+admin.site.register(Borrow, BorrowAdmin)
