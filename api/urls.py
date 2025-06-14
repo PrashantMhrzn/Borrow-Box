@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import home
+from .views import *
 
-# urlpatterns = [
-#     path('', home),
-# ]
+urlpatterns = [
+    path('author', author_list)
+]
