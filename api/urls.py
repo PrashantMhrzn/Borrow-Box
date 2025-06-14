@@ -2,5 +2,6 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
-    path('author', author_list)
+    path('author', author_list),
+    path('author/<id>', author_detail)
 ]
