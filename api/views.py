@@ -43,6 +43,15 @@ class AuthorDetail(APIView):
         return Response({
             "Detail": "Author updated!"
         })
+    
+    def patch(self, request, id):
+        author = Author.objects.get(id = id)
+        serializers = AuthorSerializer(author, data=request.data, partial=True)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response({
+            "Detail": "Author updated Partially!"
+        })
 
 
 class GenreList(APIView):
@@ -77,3 +86,32 @@ class GenreDetail(APIView):
             "Detail": "Genre Deleted!"
         })
     
+    def put(self, request, id):
+        genre = Genre.objects.get(id = id)
+        serializer = GenreSerializer(genre, data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({ 
+            "Detail": "New Genre Added!"
+        })
+    
+    def patch(self, request, id):
+        genre = Genre.objects.get(id = id)
+        serializers = GenreSerializer(genre, data=request.data, partial=True)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response({
+            "Detail": "Genre updated Partially!"
+        })
+    
+class BookList(APIView):
+    def get(self, request):
+        books = Book.objects.all()
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = BookSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

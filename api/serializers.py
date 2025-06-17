@@ -1,29 +1,31 @@
 from rest_framework import serializers
 from .models import *
 
-class AuthorSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    bio = serializers.CharField()
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ['id', 'name', 'bio']
 
-    def create(self, validated_data):
-        return Author.objects.create(**validated_data)
-    
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.bio = validated_data.get('bio', instance.bio)
-        instance.save()
-        return instance
-    
-class GenreSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    category = serializers.CharField()
-    description = serializers.CharField()
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = ['id', 'category', 'description']
 
-    def create(self, validated_data):
-        return Genre.objects.create(**validated_data)
+class BookSerializer(serializers.ModelSerializer):
+    # If you only use PrimaryKeyRelatedField, you only get IDs for GET.
+    # If you only use SlugRelatedField, you can’t POST or PUT using IDs.
+   
+    author_id = serializers.PrimaryKeyRelatedField(
+        queryset=Author.objects.all(), source='author', write_only=True
+    )
+    genre_id = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(), source='genre', write_only=True
+    )
     
-    def update(self, instance, validated_data):
-        instance.category = validated_data.get('category', instance.category)
-        instance.description = validated_data.get('description', instance.description)
-        
+    author = serializers.StringRelatedField(read_only=True)
+    genre = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Book
+        fields = ['id', 'title', 'author', 'author_id', 'published_date', 'genre', 'genre_id', 'available_copies']
+    
