@@ -6,21 +6,6 @@ import datetime
 
 User = get_user_model()
 
-# Create your models here.
-# class User(models.Model):
-#     username = models.CharField(max_length=150)
-#     email = models.EmailField(unique=True)
-#     password = models.CharField(max_length=128)
-#     READER = 'R'
-#     LIBRARIAN = 'L'
-#     STATUS_CHOICE = {
-#         READER: 'Reader',
-#         LIBRARIAN: 'Librarian'
-#     }
-#     role = models.CharField(max_length=1, choices=STATUS_CHOICE, default=READER)
-#     is_active = models.BooleanField(default=True)
-#     date_joined = models.DateTimeField()
-
 class Author(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField()
