@@ -45,7 +45,7 @@ class Reserve(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     reserve_date = models.DateTimeField(default=timezone.now)
     TAKEN = 'T'
-    AVAILABLE = 'R'
+    AVAILABLE = 'A'
     STATUS_CHOICE = {
         TAKEN: 'Taken',
         AVAILABLE: 'Available'
@@ -70,17 +70,14 @@ class Reserve(models.Model):
 #     def __str__(self):
 #         return f'{self.user} - {self.amount}'
 
+def get_default_return_date():
+    return datetime.date.today() + timezone.timedelta(days=14)
+
 class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    # borrow_date doesn't call the timezone.now function because default values should be callable
-    # The reason for this is that the default value can be a callable, and it will be called every time django 
-    # needs it, thus evaluating the function over and over again.
-    # In your case, the function timezone.now() is evaluated once (when models.py is imported), and that value 
-    # will be the default for every instance until you restart the server. 
     borrow_date = models.DateField(default=datetime.date.today)
-    return_date = models.DateField(default=datetime.date.today() + timezone.timedelta(days=14))
-    # fine = models.ForeignKey(Fine, on_delete=models.CASCADE, default=0)
+    return_date = models.DateField(default=get_default_return_date)
 
     def __str__(self):
-        return f'{self.user} had borrowed "{self.book}" till {self.return_date}'
+        return f'{self.user.username} borrowed "{self.book.title}" till {self.return_date}'

@@ -92,7 +92,7 @@ class GenreDetail(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({ 
-            "Detail": "New Genre Added!"
+            "Detail": "Genre Updated!"
         })
     
     def patch(self, request, id):
@@ -115,3 +115,150 @@ class BookList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    
+class BookDetail(APIView):
+    def get(self, request, id):
+        book = Book.objects.get(id = id)
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+    
+    def delete(self, request, id):
+        book = Book.objects.get(id = id)
+        book.delete()
+        return Response({
+            "Detail": "Book Succesfully Deleted!"
+        })
+    
+    def put(self, request, id):
+        book = Book.objects.get(id = id)
+        serializer = BookSerializer(book, data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Book Succesfully Updated!"
+        })
+    
+    def patch(self, request, id):
+        book = Book.objects.get(id = id)
+        serializer = BookSerializer(book, data = request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Book Partially Updated!"
+        })
+    
+class ReviewList(APIView):
+    def get(self, request):
+        reivews = Review.objects.all()
+        serializer = ReviewSerializer(reivews, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ReviewSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+class ReviewDetail(APIView):
+    def get(self, request, id):
+        review = Review.objects.get(id = id)
+        serializer = ReviewSerializer(review)
+        return Response(serializer.data)
+    
+    def delete(self, request, id):
+        review = Review.objects.get(id = id)
+        review.delete()
+        return Response({
+            "Detail": "Review Succesfully Deleted!"
+        })
+    
+    def put(self, request, id):
+        review = Review.objects.get(id = id)
+        serializer = ReviewSerializer(review, data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Review Succesfully Updated!"
+        })
+    
+    def patch(self, request, id):
+        review = Review.objects.get(id = id)
+        serializer = ReviewSerializer(review, data = request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Review Partially Updated!"
+        })
+
+class ReserveList(APIView):
+    def get(self, request):
+        reserve = Reserve.objects.all()
+        serializer = ReserveSerializer(reserve, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ReserveSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+class ReserveDetail(APIView):
+    def get(self, request, id):
+        reserve = Reserve.objects.get(id = id)
+        serializer = ReserveSerializer(reserve)
+        return Response(serializer.data)
+    
+    def delete(self, request, id):
+        reserve = Reserve.objects.get(id = id)
+        reserve.delete()
+        return Response({
+            "Detail": "Reserve Succesfully Deleted!"
+        })
+    
+    def put(self, request, id):
+        reserve = Reserve.objects.get(id = id)
+        serializer = ReserveSerializer(reserve, data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Reserve Succesfully Updated!"
+        })
+    
+    def patch(self, request, id):
+        reserve = Reserve.objects.get(id = id)
+        serializer = ReserveSerializer(reserve, data = request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            "Detail": "Reserve Succesfully Updated!"
+        })
+    
+   
+class BorrowList(APIView):
+    def get(self, request):
+        borrow = Borrow.objects.all()
+        serializer = BorrowSerializer(borrow, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = BorrowSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+class BorrowDetail(APIView):
+    def get(self, request, id):
+        reserve = Borrow.objects.get(id = id)
+        serializer = BorrowSerializer(reserve)
+        return Response(serializer.data)
+    
+    def delete(self, request, id):
+        reserve = Borrow.objects.get(id = id)
+        reserve.delete()
+        return Response({
+            "Detail": "Borrowed book Succesfully Deleted!"
+        })
+    
+
+    
+   
