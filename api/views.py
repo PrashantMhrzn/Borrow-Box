@@ -5,22 +5,22 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+from rest_framework.pagination import PageNumberPagination
+
 
 class AuthorList(APIView):
     def get(self, request):
-        # Load data from the db
         authors = Author.objects.all()
-        # Serializer
-        serializer = AuthorSerializer(authors, many=True)
-        return Response(serializer.data)
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(authors, request)
+        serializer = AuthorSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = AuthorSerializer(data = request.data)
+        serializer = AuthorSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({
-            "Detail": "New Author Added!"
-        })
+        return Response({"Detail": "New Author Added!"})
 
 class AuthorDetail(APIView):
     def get(self, request, id):
@@ -57,16 +57,16 @@ class AuthorDetail(APIView):
 class GenreList(APIView):
     def get(self, request):
         genre = Genre.objects.all()
-        serializer = GenreSerializer(genre, many=True)
-        return Response(serializer.data)
-    
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(genre, request)
+        serializer = GenreSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
-        serializers = GenreSerializer(data = request.data)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response({ 
-            "Detail": "New Genre Added!"
-        })
+        serializer = GenreSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"Detail": "New Genre Added!"})
     
 class GenreDetail(APIView):
     def get(self, request, id):
@@ -107,11 +107,13 @@ class GenreDetail(APIView):
 class BookList(APIView):
     def get(self, request):
         books = Book.objects.all()
-        serializer = BookSerializer(books, many=True)
-        return Response(serializer.data)
-    
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(books, request)
+        serializer = BookSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
-        serializer = BookSerializer(data = request.data)
+        serializer = BookSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -149,12 +151,14 @@ class BookDetail(APIView):
     
 class ReviewList(APIView):
     def get(self, request):
-        reivews = Review.objects.all()
-        serializer = ReviewSerializer(reivews, many=True)
-        return Response(serializer.data)
-    
+        reviews = Review.objects.all()
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(reviews, request)
+        serializer = ReviewSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
-        serializer = ReviewSerializer(data = request.data)
+        serializer = ReviewSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -192,12 +196,14 @@ class ReviewDetail(APIView):
 
 class ReserveList(APIView):
     def get(self, request):
-        reserve = Reserve.objects.all()
-        serializer = ReserveSerializer(reserve, many=True)
-        return Response(serializer.data)
-    
+        reserves = Reserve.objects.all()
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(reserves, request)
+        serializer = ReserveSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
-        serializer = ReserveSerializer(data = request.data)
+        serializer = ReserveSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -236,12 +242,14 @@ class ReserveDetail(APIView):
    
 class BorrowList(APIView):
     def get(self, request):
-        borrow = Borrow.objects.all()
-        serializer = BorrowSerializer(borrow, many=True)
-        return Response(serializer.data)
-    
+        borrows = Borrow.objects.all()
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(borrows, request)
+        serializer = BorrowSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     def post(self, request):
-        serializer = BorrowSerializer(data = request.data)
+        serializer = BorrowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
