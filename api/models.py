@@ -43,7 +43,7 @@ class Review(models.Model):
 class Reserve(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    reserve_date = models.DateTimeField(default=timezone.now)
+    reserve_date = models.DateField(default=datetime.date.today)
     TAKEN = 'T'
     AVAILABLE = 'A'
     STATUS_CHOICE = {

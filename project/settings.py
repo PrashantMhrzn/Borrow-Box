@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'auth_user',
     'rest_framework',
     'rest_framework.authtoken',
-
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +136,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Borrow Box - Library Management System',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
