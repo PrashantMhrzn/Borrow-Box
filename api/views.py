@@ -7,6 +7,7 @@ from .models import *
 from .serializers import *
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from drf_spectacular.utils import extend_schema
 
 class AuthorList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -17,6 +18,7 @@ class AuthorList(APIView):
         serializer = AuthorSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+    @extend_schema(request=AuthorSerializer, responses=AuthorSerializer)
     def post(self, request):
         serializer = AuthorSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -32,26 +34,28 @@ class AuthorDetail(APIView):
         return Response(serializer.data)
     
     def delete(self, request, id):
-        author = Author.objects.get(id = id)
+        author = Author.objects.get(id=id)
+        if Book.objects.filter(author=author).exists():
+            return Response({"Detail": "This author cannot be deleted. Book with this author exists."})
         author.delete()
-        return Response({
-            "Detail": "Author deleted!"
-        })
+        return Response({"Detail": "Author deleted successfully."})
     
+    @extend_schema(request=AuthorSerializer, responses=AuthorSerializer)
     def put(self, request, id):
         author = Author.objects.get(id = id)
-        serializers = AuthorSerializer(author, data=request.data)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
+        serializer = AuthorSerializer(author, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response({
             "Detail": "Author updated!"
         })
     
+    @extend_schema(request=AuthorSerializer, responses=AuthorSerializer)
     def patch(self, request, id):
         author = Author.objects.get(id = id)
-        serializers = AuthorSerializer(author, data=request.data, partial=True)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
+        serializer = AuthorSerializer(author, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response({
             "Detail": "Author updated Partially!"
         })
@@ -66,7 +70,8 @@ class GenreList(APIView):
         result_page = paginator.paginate_queryset(genre, request)
         serializer = GenreSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
-
+    
+    @extend_schema(request=GenreSerializer, responses=GenreSerializer)        
     def post(self, request):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -93,6 +98,7 @@ class GenreDetail(APIView):
             "Detail": "Genre Deleted!"
         })
     
+    @extend_schema(request=GenreSerializer, responses=GenreSerializer)   
     def put(self, request, id):
         genre = Genre.objects.get(id = id)
         serializer = GenreSerializer(genre, data = request.data)
@@ -102,6 +108,7 @@ class GenreDetail(APIView):
             "Detail": "Genre Updated!"
         })
     
+    @extend_schema(request=GenreSerializer, responses=GenreSerializer)   
     def patch(self, request, id):
         genre = Genre.objects.get(id = id)
         serializers = GenreSerializer(genre, data=request.data, partial=True)
@@ -120,7 +127,8 @@ class BookList(APIView):
         result_page = paginator.paginate_queryset(books, request)
         serializer = BookSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
-
+    
+    @extend_schema(request=BookSerializer, responses=BookSerializer)
     def post(self, request):
         serializer = BookSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -136,12 +144,13 @@ class BookDetail(APIView):
         return Response(serializer.data)
     
     def delete(self, request, id):
-        book = Book.objects.get(id = id)
+        book = Book.objects.get(id=id)
+        if Review.objects.filter(book=book).exists() or Reserve.objects.filter(book=book).exists() or Borrow.objects.filter(book=book).exists():
+            return Response({"Detail": "This book cannot be deleted. Related reviews/reservations/borrows exist."})
         book.delete()
-        return Response({
-            "Detail": "Book Succesfully Deleted!"
-        })
+        return Response({"Detail": "Book deleted successfully."})
     
+    @extend_schema(request=BookSerializer, responses=BookSerializer)
     def put(self, request, id):
         book = Book.objects.get(id = id)
         serializer = BookSerializer(book, data = request.data)
@@ -151,6 +160,7 @@ class BookDetail(APIView):
             "Detail": "Book Succesfully Updated!"
         })
     
+    @extend_schema(request=BookSerializer, responses=BookSerializer)
     def patch(self, request, id):
         book = Book.objects.get(id = id)
         serializer = BookSerializer(book, data = request.data, partial=True)
@@ -168,6 +178,7 @@ class ReviewList(APIView):
         serializer = ReviewSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+    @extend_schema(request=ReviewSerializer, responses=ReviewSerializer)   
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -187,6 +198,7 @@ class ReviewDetail(APIView):
             "Detail": "Review Succesfully Deleted!"
         })
     
+    @extend_schema(request=ReviewSerializer, responses=ReviewSerializer)  
     def put(self, request, id):
         review = Review.objects.get(id = id)
         serializer = ReviewSerializer(review, data = request.data)
@@ -196,6 +208,7 @@ class ReviewDetail(APIView):
             "Detail": "Review Succesfully Updated!"
         })
     
+    @extend_schema(request=ReviewSerializer, responses=ReviewSerializer)  
     def patch(self, request, id):
         review = Review.objects.get(id = id)
         serializer = ReviewSerializer(review, data = request.data, partial=True)
@@ -215,6 +228,7 @@ class ReserveList(APIView):
         serializer = ReserveSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+    @extend_schema(request=ReserveSerializer, responses=ReserveSerializer)  
     def post(self, request):
         serializer = ReserveSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -236,6 +250,7 @@ class ReserveDetail(APIView):
             "Detail": "Reserve Succesfully Deleted!"
         })
     
+    @extend_schema(request=ReserveSerializer, responses=ReserveSerializer)  
     def put(self, request, id):
         reserve = Reserve.objects.get(id = id)
         serializer = ReserveSerializer(reserve, data = request.data)
@@ -245,6 +260,7 @@ class ReserveDetail(APIView):
             "Detail": "Reserve Succesfully Updated!"
         })
     
+    @extend_schema(request=ReserveSerializer, responses=ReserveSerializer)  
     def patch(self, request, id):
         reserve = Reserve.objects.get(id = id)
         serializer = ReserveSerializer(reserve, data = request.data, partial=True)
@@ -265,6 +281,7 @@ class BorrowList(APIView):
         serializer = BorrowSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+    @extend_schema(request=BorrowSerializer, responses=BorrowSerializer)  
     def post(self, request):
         serializer = BorrowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

@@ -139,12 +139,12 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Borrow Box - Library Management System',
-    'DESCRIPTION': 'Your project description',
+    'DESCRIPTION': 'BorrowBox — A Django REST Framework-based Library Management API featuring authentication, book borrowing, reservations, dynamic fine calculation, reviews with proper filtering and pagination along side comprehensive Admin panel. Built for clean, efficient, and scalable library operations. ',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
