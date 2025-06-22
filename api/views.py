@@ -6,9 +6,10 @@ from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 from rest_framework.pagination import PageNumberPagination
-
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 class AuthorList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
         authors = Author.objects.all()
         paginator = PageNumberPagination()
@@ -23,6 +24,8 @@ class AuthorList(APIView):
         return Response({"Detail": "New Author Added!"})
 
 class AuthorDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request, id):
         authors = Author.objects.get(id = id)
         serializer = AuthorSerializer(authors)
@@ -55,6 +58,8 @@ class AuthorDetail(APIView):
 
 
 class GenreList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         genre = Genre.objects.all()
         paginator = PageNumberPagination()
@@ -69,6 +74,8 @@ class GenreList(APIView):
         return Response({"Detail": "New Genre Added!"})
     
 class GenreDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request, id):
         genre = Genre.objects.get(id = id)
         serializer = GenreSerializer(genre)
@@ -105,6 +112,8 @@ class GenreDetail(APIView):
         })
     
 class BookList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         books = Book.objects.all()
         paginator = PageNumberPagination()
@@ -119,6 +128,8 @@ class BookList(APIView):
         return Response(serializer.data)
     
 class BookDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request, id):
         book = Book.objects.get(id = id)
         serializer = BookSerializer(book)
@@ -195,6 +206,8 @@ class ReviewDetail(APIView):
         })
 
 class ReserveList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         reserves = Reserve.objects.all()
         paginator = PageNumberPagination()
@@ -209,6 +222,8 @@ class ReserveList(APIView):
         return Response(serializer.data)
     
 class ReserveDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request, id):
         reserve = Reserve.objects.get(id = id)
         serializer = ReserveSerializer(reserve)
@@ -241,6 +256,8 @@ class ReserveDetail(APIView):
     
    
 class BorrowList(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         borrows = Borrow.objects.all()
         paginator = PageNumberPagination()
@@ -255,6 +272,8 @@ class BorrowList(APIView):
         return Response(serializer.data)
     
 class BorrowDetail(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, id):
         reserve = Borrow.objects.get(id = id)
         serializer = BorrowSerializer(reserve)
