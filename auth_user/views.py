@@ -26,3 +26,4 @@ class LoginAPIView(APIView):
         })
 
 # {"username": "alice", "password": "aliceadmin123"}
+# Custom user based on roles

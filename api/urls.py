@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 
+# turn into routers
 urlpatterns = [
     path('author', AuthorList.as_view()),
     path('author/<id>', AuthorDetail.as_view()),
