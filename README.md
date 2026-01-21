@@ -16,7 +16,7 @@ borrowing, reserving, and reviewing books. The system supports authenticated use
 - Pagination for efficient data handling
 - API responses formatted for RESTful consumption
 - Comprehensive Admin panel for full database management
-- 
+
 ## Setup Instructions
 
 ### Prerequisites
